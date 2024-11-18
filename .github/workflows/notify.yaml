@@ -20,39 +20,39 @@ jobs:
           MATTERMOST_WEBHOOK: "${{ secrets.MATTERMOST_WEBHOOK }}"
         run: |
           GITHUB_ACTION_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          curl -X POST -H 'Content-Type: application/json' -d '{
-            "username": "${{ vars.MM_BOT_NAME }}",
-            "icon_url": "${{ vars.MM_BOT_IMAGE_LINK }}",
-            "attachments": [
+          curl -X POST -H 'Content-Type: application/json' -d "{
+            \"username\": \"${{ vars.MM_BOT_NAME }}\",
+            \"icon_url\": \"${{ vars.MM_BOT_IMAGE_LINK }}\",
+            \"attachments\": [
               {
-                "color": "#32CD32",
-                "fields": [
+                \"color\": \"#32CD32\",
+                \"fields\": [
                   {
-                    "short": true,
-                    "title": "Info",
-                    "value": "на стенд [${{ inputs.environment }}] задеплоено приложение [${{ inputs.application }}]"
+                    \"short\": true,
+                    \"title\": \"Info\",
+                    \"value\": \"на стенд [${{ inputs.environment }}] задеплоено приложение [${{ inputs.application }}]\"
                   },
                   {
-                    "short": true,
-                    "title": "Branch",
-                    "value": "${{ github.ref_name }}"
+                    \"short\": true,
+                    \"title\": \"Branch\",
+                    \"value\": \"${{ github.ref_name }}\"
                   },
                   {
-                    "short": true,
-                    "title": "Comment",
-                    "value": "${{ inputs.comment }}"
+                    \"short\": true,
+                    \"title\": \"Comment\",
+                    \"value\": \"${{ inputs.comment }}\"
                   },
                   {
-                    "short": true,
-                    "title": "Responsible",
-                    "value": "${{ github.actor }}"
+                    \"short\": true,
+                    \"title\": \"Responsible\",
+                    \"value\": \"${{ github.actor }}\"
                   },
                   {
-                    "short": true,
-                    "title": "Workflow URL (action)",
-                    "value": "[View in GitHub Actions]($GITHUB_ACTION_URL)"
+                    \"short\": true,
+                    \"title\": \"Workflow URL\",
+                    \"value\": \"[View in GitHub Actions]($GITHUB_ACTION_URL)\"
                   }
                 ]
               }
             ]
-          }' $MATTERMOST_WEBHOOK
+          }" $MATTERMOST_WEBHOOK
