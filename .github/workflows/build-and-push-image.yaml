@@ -4,7 +4,7 @@ name: 'Build and push docker image'
 on:
   workflow_call:
     secrets:
-      MATTERMOST_WEBHOOK:
+      HARBOR_ROBOT_TOKEN:
         required: true
 
 jobs:
