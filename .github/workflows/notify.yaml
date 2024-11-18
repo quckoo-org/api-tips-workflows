@@ -3,6 +3,16 @@ name: 'Notify MM'
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      application:
+        type: string
+        required: false
+      comment:
+        type: string
+        required: false
     secrets:
       MATTERMOST_WEBHOOK:
         required: true

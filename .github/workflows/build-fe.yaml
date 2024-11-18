@@ -3,6 +3,16 @@ name: CI/CD [* branch]
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      application:
+        type: string
+        required: false
+      comment:
+        type: string
+        required: false
     secrets:
       MATTERMOST_WEBHOOK:
         required: true
@@ -12,12 +22,28 @@ on:
 jobs:
   image_build_and_push:
     uses: ./.github/workflows/build-and-push-image.yaml
+    with:
+      environment: ${{ inputs.environment }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
 
+  helm_prepare_and_push:
+    uses: ./.github/workflows/helm_prepare_and_push.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
+    needs:
+      - image_build_and_push
+
   notify:
     uses: ./.github/workflows/notify.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      application: ${{ inputs.application }}
+      comment: ${{ inputs.comment }}
     secrets:
       MATTERMOST_WEBHOOK : ${{ secrets.MATTERMOST_WEBHOOK }}
     needs:
       - image_build_and_push
+      - helm_prepare_and_push
