@@ -8,6 +8,10 @@ on:
         required: true
 
 jobs:
+  image_build_and_push:
+    uses: ./.github/workflows/build-and-push-image.yaml
+    secrets:
+      HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
 
   notify:
     uses: ./.github/workflows/notify.yaml
