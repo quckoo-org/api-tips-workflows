@@ -14,8 +14,6 @@ jobs:
     outputs:
       short_sha: ${{ steps.short_sha_step.outputs.sha }}
       image_version: ${{ steps.set_image_version.outputs.image_version }}
-    needs:
-      - check_enviroment
     steps:
       - name: Checkout
         uses: actions/checkout@v3
