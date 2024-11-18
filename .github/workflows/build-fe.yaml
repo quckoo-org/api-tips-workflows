@@ -6,6 +6,8 @@ on:
     secrets:
       MATTERMOST_WEBHOOK:
         required: true
+      HARBOR_ROBOT_TOKEN:
+        required: true
 
 jobs:
   image_build_and_push:
