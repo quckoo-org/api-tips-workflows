@@ -1,4 +1,4 @@
-# quckoo-org/api-tips-workflows/.github/workflows/build-fe.yaml@master
+# quckoo-org/api-tips-workflows/.github/workflows/build-be.yaml@master
 name: CI/CD [* branch]
 
 on:
