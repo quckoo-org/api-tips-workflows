@@ -47,6 +47,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/deploy.yaml
     needs:
+      - image_build_and_push
       - helm_prepare_and_push
     with:
       environment: ${{ inputs.environment }}
