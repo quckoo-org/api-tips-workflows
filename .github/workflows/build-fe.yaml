@@ -19,6 +19,10 @@ on:
       HARBOR_ROBOT_TOKEN:
         required: true
 
+env:
+  HELM_EXPERIMENTAL_OCI: 1
+  DEFAULT_VERSION_CHART: "0.0.0"
+
 jobs:
   image_build_and_push:
     uses: ./.github/workflows/build-and-push-image.yaml
