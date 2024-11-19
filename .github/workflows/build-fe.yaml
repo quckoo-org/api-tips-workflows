@@ -13,14 +13,15 @@ on:
       comment:
         type: string
         required: false
+      default_chart_version:
+        type: string
+        required: false
+        default: "0.0.0"
     secrets:
       MATTERMOST_WEBHOOK:
         required: true
       HARBOR_ROBOT_TOKEN:
         required: true
-
-env:
-  DEFAULT_VERSION_CHART: "0.0.0"
 
 jobs:
   image_build_and_push:
@@ -35,7 +36,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       sha: ${{ needs.image_build_and_push.outputs.short_sha }}
-      default_chart_version: ${{ env.DEFAULT_VERSION_CHART }}
+      default_chart_version: ${{ inputs.default_chart_version }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
     needs:
