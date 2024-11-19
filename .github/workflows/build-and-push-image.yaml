@@ -37,8 +37,6 @@ jobs:
 
       - name: Set [short_sha] in [GITHUB_OUTPUT]
         run: |
-          echo "short_sha=${{ steps.short_sha_step.outputs.sha }}" >> $GITHUB_ENV
-          echo "sha=${{ steps.short_sha_step.outputs.sha }}" >> $GITHUB_OUTPUT
           echo "short_sha set up to [${{ steps.short_sha_step.outputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build and push Docker image [Development version]
@@ -67,9 +65,12 @@ jobs:
         id: set_image_version
         run: |
           if [[ "${{ inputs.environment }}" == "production" && "${{ github.ref_type }}" == "tag" ]]; then
-            echo "image_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ github.ref_name }}]" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "image_version=${{ steps.short_sha_step.outputs.sha }}-dev" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ steps.short_sha_step.outputs.sha }}-dev]" >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - name: Debug outputs
+        run: |
+          echo "Outputs of short_sha_step:"
+          echo "${{ toJSON(steps.short_sha_step.outputs) }}"
