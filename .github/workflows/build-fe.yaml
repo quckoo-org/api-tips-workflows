@@ -44,27 +44,27 @@ jobs:
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
 
-  # deploy:
-  #   uses: ./.github/workflows/deploy.yaml
-  #   needs:
-  #     - image_build_and_push
-  #     - helm_prepare_and_push
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     short_sha: ${{ needs.image_build_and_push.outputs.short_sha }}
-  #     image_version: ${{ needs.image_build_and_push.outputs.image_version }}
-  #     default_chart_version: ${{ inputs.default_chart_version }}
-  #   secrets:
-  #     KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
-  #     HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    needs:
+      - image_build_and_push
+      - helm_prepare_and_push
+    with:
+      environment: ${{ inputs.environment }}
+      short_sha: ${{ needs.image_build_and_push.outputs.short_sha }}
+      image_version: ${{ needs.image_build_and_push.outputs.image_version }}
+      default_chart_version: ${{ inputs.default_chart_version }}
+    secrets:
+      KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
+      HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
 
-  # notify:
-  #   uses: ./.github/workflows/notify.yaml
-  #   needs:
-  #     - deploy
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     application: ${{ inputs.application }}
-  #     comment: ${{ inputs.comment }}
-  #   secrets:
-  #     MATTERMOST_WEBHOOK : ${{ secrets.MATTERMOST_WEBHOOK }}
+  notify:
+    uses: ./.github/workflows/notify.yaml
+    needs:
+      - deploy
+    with:
+      environment: ${{ inputs.environment }}
+      application: ${{ inputs.application }}
+      comment: ${{ inputs.comment }}
+    secrets:
+      MATTERMOST_WEBHOOK : ${{ secrets.MATTERMOST_WEBHOOK }}
