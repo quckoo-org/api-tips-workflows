@@ -33,7 +33,7 @@ jobs:
 
       - name: Debug outputs
         run: |
-          echo "Short SHA: ${{ steps.short_sha_step.outputs.sha }}"
+          echo "Short SHA: ${{ inputs.sha }}"
 
       - name: Lint Helm chart
         run: |
