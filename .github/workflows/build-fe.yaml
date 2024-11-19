@@ -31,6 +31,7 @@ jobs:
     uses: ./.github/workflows/helm_prepare_and_push.yaml
     with:
       environment: ${{ inputs.environment }}
+      short_sha: ${{ needs.image_build_and_push.outputs.short_sha }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
     needs:
