@@ -7,7 +7,7 @@ on:
       environment:
         type: string
         required: true
-      short_sha:
+      sha:
         type: string
         required: true
     secrets:
@@ -27,14 +27,14 @@ jobs:
 
       - name: Lint Helm chart
         run: |
-          sed -i "s/version\:.*/version\: ${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.short_sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
-          sed -i "s/appVersion\:.*/appVersion\: ${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.short_sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
+          sed -i "s/version\:.*/version\: ${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
+          sed -i "s/appVersion\:.*/appVersion\: ${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
           helm lint ./.helm/${{ vars.APPLICATION_NAME }}
 
       - name: Push Helm chart
         run: |
           echo "${{ secrets.HARBOR_ROBOT_TOKEN }}" | helm registry login ${{ vars.HARBOR_HOST }} --username '${{ vars.HARBOR_ROBOT_NAME }}' --password-stdin
           helm package ./.helm/${{ vars.APPLICATION_NAME }}
-          helm push ${{ vars.APPLICATION_NAME }}-${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.short_sha }}.tgz oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart
-          echo "Chart [${{ vars.APPLICATION_NAME }}] pushed as [oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart] version [${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.short_sha }}]" >> "$GITHUB_STEP_SUMMARY"
-          rm ${{ vars.APPLICATION_NAME }}-${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.short_sha }}.tgz
+          helm push ${{ vars.APPLICATION_NAME }}-${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.sha }}.tgz oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart
+          echo "Chart [${{ vars.APPLICATION_NAME }}] pushed as [oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart] version [${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
+          rm ${{ vars.APPLICATION_NAME }}-${{ env.DEFAULT_VERSION_CHART }}-${{ inputs.sha }}.tgz
