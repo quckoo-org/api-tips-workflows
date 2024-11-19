@@ -1,0 +1,35 @@
+# quckoo-org/api-tips-workflows/.github/workflows/build-fe.yaml@master
+name: CI/CD [* branch]
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      application:
+        type: string
+        required: false
+      comment:
+        type: string
+        required: false
+      default_chart_version:
+        type: string
+        required: false
+        default: "0.0.0"
+    secrets:
+      MATTERMOST_WEBHOOK:
+        required: true
+      HARBOR_ROBOT_TOKEN:
+        required: true
+      KUBE_CONFIG:
+        required: true
+
+jobs:
+  image_build_and_push:
+    uses: ./.github/workflows/build-and-push-image.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
+
