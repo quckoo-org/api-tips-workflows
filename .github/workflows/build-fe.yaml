@@ -37,7 +37,7 @@ jobs:
       - image_build_and_push
     with:
       environment: ${{ inputs.environment }}
-      sha: ${{ needs.image_build_and_push.outputs.short_sha }}
+      short_sha: ${{ needs.image_build_and_push.outputs.short_sha }}
       default_chart_version: ${{ inputs.default_chart_version }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}

@@ -7,7 +7,7 @@ on:
       environment:
         type: string
         required: true
-      sha:
+      short_sha:
         type: string
         required: true
       default_chart_version:
@@ -31,20 +31,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Debug outputs
-        run: |
-          echo "Short SHA: ${{ inputs.sha }}"
-
       - name: Lint Helm chart
         run: |
-          sed -i "s/version\:.*/version\: ${{ inputs.default_chart_version }}-${{ inputs.sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
-          sed -i "s/appVersion\:.*/appVersion\: ${{ inputs.default_chart_version }}-${{ inputs.sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
+          sed -i "s/version\:.*/version\: ${{ inputs.default_chart_version }}-${{ inputs.short_sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
+          sed -i "s/appVersion\:.*/appVersion\: ${{ inputs.default_chart_version }}-${{ inputs.short_sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
           helm lint ./.helm/${{ vars.APPLICATION_NAME }}
 
       - name: Push Helm chart
         run: |
           echo "${{ secrets.HARBOR_ROBOT_TOKEN }}" | helm registry login ${{ vars.HARBOR_HOST }} --username '${{ vars.HARBOR_ROBOT_NAME }}' --password-stdin
           helm package ./.helm/${{ vars.APPLICATION_NAME }}
-          helm push ${{ vars.APPLICATION_NAME }}-${{ inputs.default_chart_version }}-${{ inputs.sha }}.tgz oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart
-          echo "Chart [${{ vars.APPLICATION_NAME }}] pushed as [oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart] version [${{ inputs.default_chart_version }}-${{ inputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
-          rm ${{ vars.APPLICATION_NAME }}-${{ inputs.default_chart_version }}-${{ inputs.sha }}.tgz
+          helm push ${{ vars.APPLICATION_NAME }}-${{ inputs.default_chart_version }}-${{ inputs.short_sha }}.tgz oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart
+          echo "Chart [${{ vars.APPLICATION_NAME }}] pushed as [oci://${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}-chart] version [${{ inputs.default_chart_version }}-${{ inputs.short_sha }}]" >> "$GITHUB_STEP_SUMMARY"
+          rm ${{ vars.APPLICATION_NAME }}-${{ inputs.default_chart_version }}-${{ inputs.short_sha }}.tgz
