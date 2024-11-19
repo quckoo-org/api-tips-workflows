@@ -37,6 +37,7 @@ jobs:
 
       - name: Set [short_sha] in [GITHUB_OUTPUT]
         run: |
+          echo "short_sha=${{ steps.short_sha_step.outputs.sha }}" >> $GITHUB_ENV
           echo "sha=${{ steps.short_sha_step.outputs.sha }}" >> $GITHUB_OUTPUT
           echo "short_sha set up to [${{ steps.short_sha_step.outputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
 
