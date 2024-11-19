@@ -31,6 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Debug outputs
+        run: |
+          echo "Short SHA: ${{ steps.short_sha_step.outputs.sha }}"
+
       - name: Lint Helm chart
         run: |
           sed -i "s/version\:.*/version\: ${{ inputs.default_chart_version }}-${{ inputs.sha }}/" .helm/${{ vars.APPLICATION_NAME }}/Chart.yaml
