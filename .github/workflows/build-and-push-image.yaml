@@ -17,8 +17,6 @@ on:
     secrets:
       HARBOR_ROBOT_TOKEN:
         required: true
-      KUBE_CONFIG:
-        required: true
 
 jobs:
   image_build_and_push:
@@ -48,13 +46,6 @@ jobs:
         run: |
           echo "short_sha set up to [${{ steps.short_sha_step.outputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Get postgres password
-        id: get_postgres_password
-        run: |
-          echo ${{ secrets.KUBE_CONFIG }} | base64 -d > ~/CONFIG
-          export KUBECONFIG=~/CONFIG
-          echo "password=$(kubectl get secret "postgresql-bitnami" -o jsonpath="{.data.postgres-password}" | base64 -d)" >> $GITHUB_ENV
-
       - name: Build and push Docker image [Development version]
         if: ${{ inputs.environment == 'development' && github.ref_type != 'tag' }}
         uses: docker/build-push-action@v4
@@ -63,7 +54,6 @@ jobs:
           build-args: |
             "SHA_COMMIT=${{ steps.short_sha_step.outputs.sha }}"
             "BRANCH_NAME=${{ github.ref_name }}"
-            "POSTGRES_PASSWORD=${{ steps.get_postgres_password.outputs.password }}"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-dev, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-dev
 

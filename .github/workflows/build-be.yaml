@@ -32,7 +32,6 @@ jobs:
       environment: ${{ inputs.environment }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
-      KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
 
   helm_prepare_and_push:
     uses: ./.github/workflows/helm_prepare_and_push.yaml
