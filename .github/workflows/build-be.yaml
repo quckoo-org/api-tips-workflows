@@ -17,6 +17,15 @@ on:
         type: string
         required: false
         default: "0.0.0"
+      POSTGRES_HOST:
+        type: string
+        required: false
+      POSTGRES_PORT:
+        type: string
+        required: false
+      POSTGRES_DATABASE:
+        type: string
+        required: false
     secrets:
       MATTERMOST_WEBHOOK:
         required: true
@@ -55,6 +64,9 @@ jobs:
       short_sha: ${{ needs.image_build_and_push.outputs.short_sha }}
       image_version: ${{ needs.image_build_and_push.outputs.image_version }}
       default_chart_version: ${{ inputs.default_chart_version }}
+      POSTGRES_HOST : ${{ inputs.POSTGRES_HOST }}
+      POSTGRES_PORT : ${{ inputs.POSTGRES_PORT }}
+      POSTGRES_DATABASE : ${{ inputs.POSTGRES_DATABASE }}
     secrets:
       KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
