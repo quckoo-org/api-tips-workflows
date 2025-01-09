@@ -47,16 +47,18 @@ jobs:
       run: |
         echo ${{ secrets.KUBE_CONFIG }} | base64 -d > ~/CONFIG
         export KUBECONFIG=~/CONFIG
-        POSTGRES_PASSWORD=$(kubectl get secret "postgresql-bitnami" -o jsonpath="{.data.postgres-password}" | base64 -d)
-        echo "postgres_password=$POSTGRES_PASSWORD" >> $GITHUB_ENV
+        postgres_password=$(kubectl get secret "postgresql-bitnami" -o jsonpath="{.data.postgres-password}" | base64 -d)
+        echo "::add-mask::$postgres_password"
+        echo "postgres_password=$postgres_password" >> $GITHUB_ENV
 
     - name: Get redis password
       id: get_redis_password
       run: |
         echo ${{ secrets.KUBE_CONFIG }} | base64 -d > ~/CONFIG
         export KUBECONFIG=~/CONFIG
-        REDIS_PASSWORD=$(kubectl get secret "redis" -o jsonpath="{.data.redis-password}" | base64 -d)
-        echo "redis_password=$REDIS_PASSWORD" >> $GITHUB_ENV
+        redis_password=$(kubectl get secret "redis" -o jsonpath="{.data.redis-password}" | base64 -d)
+        echo "::add-mask::$redis_password"
+        echo "redis_password=$redis_password" >> $GITHUB_ENV
 
   image_build_and_push:
     runs-on: self-hosted
