@@ -33,6 +33,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Verify kubectl installation
+        run: kubectl version --client
+
       - name: Log in to [Harbor]
         uses: docker/login-action@v2
         with:
