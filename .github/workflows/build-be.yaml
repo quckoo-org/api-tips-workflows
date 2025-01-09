@@ -24,6 +24,10 @@ on:
         required: true
       KUBE_CONFIG:
         required: true
+      JWT_SECRET_KEY:
+        required: true
+      SEQ_TOKEN:
+        required: true
 
 jobs:
   image_build_and_push:
@@ -32,6 +36,7 @@ jobs:
       environment: ${{ inputs.environment }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
+      JWT_SECRET_KEY : ${{ secrets.JWT_SECRET_KEY }}
 
   helm_prepare_and_push:
     uses: ./.github/workflows/helm_prepare_and_push.yaml
@@ -57,6 +62,7 @@ jobs:
     secrets:
       KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
+      SEQ_TOKEN : ${{ secrets.SEQ_TOKEN }}
 
   notify:
     uses: ./.github/workflows/notify.yaml

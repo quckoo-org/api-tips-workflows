@@ -17,6 +17,8 @@ on:
     secrets:
       HARBOR_ROBOT_TOKEN:
         required: true
+      JWT_SECRET_KEY:
+        required: false
 
 jobs:
   image_build_and_push:
@@ -46,6 +48,20 @@ jobs:
         run: |
           echo "short_sha set up to [${{ steps.short_sha_step.outputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Get postgres password
+        run: |
+          echo ${{ secrets.KUBE_CONFIG }} | base64 -d > ~/CONFIG
+          export KUBECONFIG=~/CONFIG
+          POSTGRES_PASSWORD=$(kubectl get secret "postgresql-bitnami" -o jsonpath="{.data.postgres-password}" | base64 -d)
+          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> $GITHUB_ENV
+
+      - name: Get redis password
+        run: |
+          echo ${{ secrets.KUBE_CONFIG }} | base64 -d > ~/CONFIG
+          export KUBECONFIG=~/CONFIG
+          REDIS_PASSWORD=$(kubectl get secret "redis" -o jsonpath="{.data.redis-password}" | base64 -d)
+          echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> $GITHUB_ENV
+
       - name: Build and push Docker image [Development version]
         if: ${{ inputs.environment == 'development' && github.ref_type != 'tag' }}
         uses: docker/build-push-action@v4
@@ -54,6 +70,9 @@ jobs:
           build-args: |
             "SHA_COMMIT=${{ steps.short_sha_step.outputs.sha }}"
             "BRANCH_NAME=${{ github.ref_name }}"
+            "POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}"
+            "REDIS_PASSWORD=${{ env.REDIS_PASSWORD }}"
+            "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-dev, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-dev
 
@@ -65,6 +84,9 @@ jobs:
           build-args: |
             "SHA_COMMIT=${{ steps.short_sha_step.outputs.sha }}"
             "VERSION_TAG=${{ github.ref_name }}"
+            "POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}"
+            "REDIS_PASSWORD=${{ env.REDIS_PASSWORD }}"
+            "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ github.ref_name }}, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest
 
