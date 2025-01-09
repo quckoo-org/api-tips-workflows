@@ -19,6 +19,8 @@ on:
         required: true
       JWT_SECRET_KEY:
         required: false
+      KUBE_CONFIG:
+        required: false
 
 jobs:
   image_build_and_push:

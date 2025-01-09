@@ -37,6 +37,7 @@ jobs:
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
       JWT_SECRET_KEY : ${{ secrets.JWT_SECRET_KEY }}
+      KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
 
   helm_prepare_and_push:
     uses: ./.github/workflows/helm_prepare_and_push.yaml
