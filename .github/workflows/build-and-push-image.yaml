@@ -54,6 +54,11 @@ jobs:
         run: |
           echo "short_sha set up to [${{ steps.short_sha_step.outputs.sha }}]" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: DEBUG
+        run: |
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
+
       - name: Build and push Docker image [Development version]
         if: ${{ inputs.environment == 'development' && github.ref_type != 'tag' }}
         uses: docker/build-push-action@v4
