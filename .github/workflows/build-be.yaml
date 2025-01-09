@@ -30,14 +30,25 @@ on:
         required: true
 
 jobs:
+  infra_get_credentials:
+    uses: ./.github/workflows/get_passwords.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
+
   image_build_and_push:
     uses: ./.github/workflows/build-and-push-image.yaml
+    needs:
+      - infra_get_credentials
     with:
       environment: ${{ inputs.environment }}
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
       JWT_SECRET_KEY : ${{ secrets.JWT_SECRET_KEY }}
       KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
+      POSTGRES_PASSWORD: ${{ needs.infra_get_credentials.outputs.postgres_password }}
+      REDIS_PASSWORD: ${{ needs.infra_get_credentials.outputs.redis_password }}
 
   helm_prepare_and_push:
     uses: ./.github/workflows/helm_prepare_and_push.yaml
