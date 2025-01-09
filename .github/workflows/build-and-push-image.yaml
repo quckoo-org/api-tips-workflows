@@ -22,7 +22,7 @@ on:
 
 jobs:
   image_build_and_push:
-    runs-on: 'ubuntu-latest'
+    runs-on: self-hosted
     if: ${{ always() && !(contains(needs.*.result, 'failure')) && !cancelled() }}
     outputs:
       short_sha: ${{ steps.short_sha_step.outputs.sha }}

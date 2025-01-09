@@ -22,7 +22,7 @@ env:
 
 jobs:
   helm_prepare_and_push:
-      runs-on: 'ubuntu-latest'
+      runs-on: self-hosted
       if: ${{ always() && !(contains(needs.*.result, 'failure')) && !cancelled() }}
       container:
         image: ghcr.io/helmfile/helmfile:v1.0.0-rc.7
