@@ -31,7 +31,7 @@ on:
 
 jobs:
   infra_get_credentials:
-    uses: ./.github/workflows/get_passwords.yaml
+    uses: ./.github/workflows/get-passwords.yaml
     with:
       environment: ${{ inputs.environment }}
     secrets:
