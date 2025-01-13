@@ -28,6 +28,8 @@ on:
         required: true
       SEQ_TOKEN:
         required: true
+      SMTP_PASSWORD:
+        required: true
 
 jobs:
   infra_get_credentials:
@@ -46,6 +48,7 @@ jobs:
     secrets:
       HARBOR_ROBOT_TOKEN : ${{ secrets.HARBOR_ROBOT_TOKEN }}
       JWT_SECRET_KEY : ${{ secrets.JWT_SECRET_KEY }}
+      SMTP_PASSWORD : ${{ secrets.SMTP_PASSWORD }}
       KUBE_CONFIG : ${{ secrets.KUBE_CONFIG }}
       POSTGRES_PASSWORD: ${{ needs.infra_get_credentials.outputs.postgres_password }}
       REDIS_PASSWORD: ${{ needs.infra_get_credentials.outputs.redis_password }}

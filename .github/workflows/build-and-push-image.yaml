@@ -25,6 +25,8 @@ on:
         required: false
       REDIS_PASSWORD:
         required: false
+      SMTP_PASSWORD:
+        required: false
 
 jobs:
   image_build_and_push:
@@ -70,6 +72,7 @@ jobs:
             "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
+            "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-dev, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-dev
 
@@ -84,6 +87,7 @@ jobs:
             "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
+            "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ github.ref_name }}, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest
 
