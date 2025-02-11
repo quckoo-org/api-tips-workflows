@@ -73,6 +73,7 @@ jobs:
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
             "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
+            "NEXT_PUBLIC_API_URL=https://dev.api-tips.api.quckoo.net"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-dev, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-dev
 
@@ -88,6 +89,7 @@ jobs:
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
             "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
+            "NEXT_PUBLIC_API_URL=https://stage.api-tips.api.quckoo.net"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-stage, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-stage
 
@@ -103,6 +105,7 @@ jobs:
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
             "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
+            "NEXT_PUBLIC_API_URL=https://prod.api-tips.api.quckoo.net"
           push: true
           tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ github.ref_name }}, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest
 
