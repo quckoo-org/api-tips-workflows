@@ -83,13 +83,13 @@ jobs:
           context: .
           build-args: |
             "SHA_COMMIT=${{ steps.short_sha_step.outputs.sha }}"
-            "VERSION_TAG=${{ github.ref_name }}"
+            "BRANCH_NAME=${{ github.ref_name }}"
             "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
             "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
             "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}"
             "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
           push: true
-          tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ github.ref_name }}, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest
+          tags: ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:${{ steps.short_sha_step.outputs.sha }}-stage, ${{ vars.HARBOR_HOST }}/${{ vars.HARBOR_PROJECT_NAME }}/${{ vars.APPLICATION_NAME }}:latest-stage
 
       - name: Build and push Docker image [Production version]
         if: ${{ inputs.environment == 'production' && github.ref_type == 'tag' }}
@@ -112,6 +112,9 @@ jobs:
           if [[ "${{ inputs.environment }}" == "production" && "${{ github.ref_type }}" == "tag" ]]; then
             echo "image_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ github.ref_name }}]" >> "$GITHUB_STEP_SUMMARY"
+          else if [[ "${{ inputs.environment }}" == "stage" && "${{ github.ref_type }}" == "tag" ]]; then
+            echo "image_version=${{ steps.short_sha_step.outputs.sha }}-stage" >> $GITHUB_OUTPUT
+            echo "Image [${{ inputs.environment }}] version is [${{ steps.short_sha_step.outputs.sha }}-stage]" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "image_version=${{ steps.short_sha_step.outputs.sha }}-dev" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ steps.short_sha_step.outputs.sha }}-dev]" >> "$GITHUB_STEP_SUMMARY"
