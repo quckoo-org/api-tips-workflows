@@ -112,7 +112,7 @@ jobs:
           if [[ "${{ inputs.environment }}" == "production" && "${{ github.ref_type }}" == "tag" ]]; then
             echo "image_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ github.ref_name }}]" >> "$GITHUB_STEP_SUMMARY"
-          else if [[ "${{ inputs.environment }}" == "stage" && "${{ github.ref_type }}" == "tag" ]]; then
+          elif [[ "${{ inputs.environment }}" == "stage" && "${{ github.ref_type }}" == "tag" ]]; then
             echo "image_version=${{ steps.short_sha_step.outputs.sha }}-stage" >> $GITHUB_OUTPUT
             echo "Image [${{ inputs.environment }}] version is [${{ steps.short_sha_step.outputs.sha }}-stage]" >> "$GITHUB_STEP_SUMMARY"
           else
